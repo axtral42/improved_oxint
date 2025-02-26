@@ -27,3 +27,5 @@ Execution:
 cd Modules
 source oxint/bin/activate
 python3 -m streamlit run chatbot.py
+
+Dependency Ollama, Llama3.1:8b
