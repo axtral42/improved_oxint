@@ -123,6 +123,7 @@ async def ox_name(name: str,keyword:str, update: Update, context: ContextTypes.D
     print("Function called")
     dorks = Google.Dork(name, keyword, False)  # Assuming Google and sma are defined elsewhere
     print("Dork done")
+    print(dorks)
     sm_profiles,sm_posts = sma.classify(dorks[0])
     content={}
     print(sm_profiles)

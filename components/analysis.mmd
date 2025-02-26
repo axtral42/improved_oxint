@@ -1,0 +1,6 @@
+graph LR
+  subgraph "Processing & Analysis"
+    M[Person Profiling] -->|Filtered Data| N[Pre trained LLM]
+    N -->|NER & Noise Reduction| O[Processed Information]
+  end
+

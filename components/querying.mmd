@@ -1,0 +1,14 @@
+graph LR
+  subgraph "User Query & Insights"
+    O[Processed Information] -->|Chatbot Interface| P[Interactive Querying]
+    P -->|User Follow-up Query| Q[RAG Database]
+    Q -->|Filtered Response| R[Ollama LLM]
+    R -->|Refined Answer| S[User Output]
+
+    subgraph "Query Loop"
+      S -->|Next Query?| T{Continue or Exit?}
+      T -->|Continue| P
+      T -->|Exit| U[End Interaction]
+    end
+  end
+

@@ -1,0 +1,9 @@
+graph LR
+  subgraph "Data Storage & Profiling"
+    I[Scraper] --> J[RAG Data Processing]
+    J -->|Chunking & Vectorization| K[Vector Database]
+    J -->|Structured Data| L[Relational Storage]
+    K --> L
+    L -->|Entity Linking & Profile Segmentation| M[Person Profiling]
+  end
+

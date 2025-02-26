@@ -1,4 +1,4 @@
 Modules/.env
 Modules/oxint/
 Modules/__pycache__/
-
+Modules/nohup.out

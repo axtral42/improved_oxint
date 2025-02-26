@@ -1,0 +1,8 @@
+graph LR
+  subgraph "Classification & Scraping Layer"
+    H{Link Classification} -->|Social Media| I[Scraper]
+    H -->|Posts| I
+    H -->|External Sites| I
+    H -->|Files| I
+  end
+

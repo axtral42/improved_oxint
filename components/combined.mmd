@@ -1,0 +1,9 @@
+graph TB
+
+  %% User Input & Querying
+  A["User Input"] --> B["Query Processing"] --> C["Search APIs"] --> D["Data Classification"] --> E["RAG Storage"] --> F["Profile Management"] --> G["Pre trained LLM"] --> H["Filtered Insights"] --> I["Chatbot Interface"]
+
+  %% Interactive Querying & Cycle
+  I --> J["Follow-up Query"] --> E
+  I -->|Exit| K["End Interaction"]
+

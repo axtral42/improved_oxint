@@ -1,0 +1,6 @@
+graph LR
+  subgraph "Data Retrieval Layer"
+    F[Search & Intelligence APIs] -->|Query Refinement & Dorking| G[Fetch Relevant Links]
+    G --> H{Link Classification}
+  end
+

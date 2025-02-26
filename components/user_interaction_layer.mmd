@@ -1,0 +1,13 @@
+graph LR
+  subgraph "User Interaction Layer"
+    A[User Input] -->|Structured Input| B{Input Format}
+    B -->|"name: Xxxx, keyword: Xxx etc"| C[Request Processing]
+
+    subgraph "Interaction Methods"
+      C -->|Streamlit Web App| D[Frontend UI]
+      C -->|Telegram API| E[Bot Interface]
+    end
+
+    D & E -->|Formatted Query| F[Search & Intelligence APIs]
+  end
+

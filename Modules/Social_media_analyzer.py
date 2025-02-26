@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import re
 import json
 
+
 search_results=[]
 instagram=[]
 facebook=[]
@@ -35,6 +36,7 @@ def sm_classify(info):
                 facebook.append(info)
                 return sm_class,facebook
             else:
+                print("External Link:", info)
                 sm_class="external_site"
                 external_link.append(info)
                 return sm_class,external_link
@@ -47,7 +49,6 @@ def sm_classify(info):
             phonenum.append(info)
             return sm_class,phonenum
         else:
-            
             sm_class="bio"
             bio.append(info)
             return sm_class,bio
@@ -69,6 +70,7 @@ def classify(social_media):
     for i in profile:
         result=sm_classify(i)
         classified[result[0]]=result[1]
+        #print(classified)
     return classified,posts
 
 def extract_facebook_bio_item(i):
@@ -89,12 +91,12 @@ def extract_facebook_bio_item(i):
 
 headers_dict = {
     "Host": "www.facebook.com",
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0",
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.5",
     "Accept-Encoding": "gzip, deflate, br",
     "Connection": "keep-alive",
-    "Cookie": "wd=1910x380; datr=QBJ7ZsH125rg2wY5RwsT-Hda",
+    "Cookie": "datr=iJJ9Z3Dt1R6EsUSpk_c5JHHw; sb=iJJ9ZwN8oNewTyNrs1uvAQv4; wd=1920x503",
     "Upgrade-Insecure-Requests": "1",
     "Sec-Fetch-Dest": "document",
     "Sec-Fetch-Mode": "navigate",
@@ -102,21 +104,24 @@ headers_dict = {
     "Sec-Fetch-User": "?1",
     "Sec-GPC": "1",
     "TE": "trailers"
+
 }
 
 
 
 def facebook_extractor(link):
-    r=requests.get(link,headers=headers_dict)
+    r=requests.get(link)
+    print(r.content)
     #
     soup=BeautifulSoup(r.content,'html5lib')
-
-    intro_card=soup.find(string=re.compile("INTRO_CARD")).text
-    #intro_card=soup.find_all(string="ContextItemDefaultRenderer")
+    
+    #intro_card=soup.find(string=re.compile("INTRO_CARD")).text
+    
+    intro_card=soup.find_all(string="ContextItemDefaultRenderer")
+    
 
     intro_card=intro_card.split("ContextItemDefaultRenderer")
     website_card=intro_card[-1].split("WebsiteContextItemRenderer")
-
     found=[]
     content={}
     total=[0,0]
