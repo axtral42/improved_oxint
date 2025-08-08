@@ -75,5 +75,6 @@ try:
 
     else:
         st.warning("Please enter a question to get an answer.")
-except:
+except Exception as e:
     st.warning("Error occured, Try again later.")
+    print(e)

@@ -1,91 +1,98 @@
+import json
+import re
+
 import requests
 from bs4 import BeautifulSoup
-import re
-import json
 
 
-search_results=[]
-instagram=[]
-facebook=[]
-linkedin=[]
-twitter=[]
-email=[]
-phonenum=[]
-external_link=[]
-bio=[]
-content=[]
+def init():
+    global search_results, instagram, facebook, linkedin, twitter, email, phonenum, external_link, bio, content
+    search_results = []
+    instagram = []
+    facebook = []
+    linkedin = []
+    twitter = []
+    email = []
+    phonenum = []
+    external_link = []
+    bio = []
+    content = []
+
 
 def sm_classify(info):
-    sm_class=""
+    sm_class = ""
     try:
         if "https" in info:
             if "instagram" in info:
-                sm_class="instagram"
+                sm_class = "instagram"
                 instagram.append(info)
-                return sm_class,instagram
+                return sm_class, instagram
             elif "twitter.com" in info:
-                sm_class="twitter"
+                sm_class = "twitter"
                 twitter.append(info)
-                return sm_class,twitter
+                return sm_class, twitter
             elif "linkedin" in info:
-                sm_class="linkedin"
+                sm_class = "linkedin"
                 linkedin.append(info)
-                return sm_class,linkedin
+                return sm_class, linkedin
             elif "facebook" in info and "php" not in info:
-                sm_class="facebook"
+                sm_class = "facebook"
                 facebook.append(info)
-                return sm_class,facebook
+                return sm_class, facebook
             else:
                 print("External Link:", info)
-                sm_class="external_site"
+                sm_class = "external_site"
                 external_link.append(info)
-                return sm_class,external_link
+                return sm_class, external_link
         elif "@" in info:
-            sm_class="email"
+            sm_class = "email"
             email.append(info)
-            return sm_class,email
-        elif isinstance(eval("1"+info.replace(" ",'')),int):
-            sm_class="phonenum"
+            return sm_class, email
+        elif isinstance(eval("1" + info.replace(" ", "")), int):
+            sm_class = "phonenum"
             phonenum.append(info)
-            return sm_class,phonenum
+            return sm_class, phonenum
         else:
-            sm_class="bio"
+            sm_class = "bio"
             bio.append(info)
-            return sm_class,bio
+            return sm_class, bio
     except:
-        sm_class="content"
+        sm_class = "content"
         content.append(info)
-        return sm_class,content
+        return sm_class, content
     return sm_class
 
+
 def classify(social_media):
-    posts=[]
-    profile=[]
+    posts = []
+    profile = []
+    init()
     for i in social_media:
         if "reel" not in i and "status" not in i and "post" not in i:
             profile.append(i)
         else:
             posts.append(i)
-    classified={}
+    classified = {}
     for i in profile:
-        result=sm_classify(i)
-        classified[result[0]]=result[1]
-        #print(classified)
-    return classified,posts
+        result = sm_classify(i)
+        classified[result[0]] = result[1]
+        # print(classified)
+    return classified, posts
+
 
 def extract_facebook_bio_item(i):
     if "external_url" in i:
-        new=i.split('"external_url":')
-        text=new[1].split(",")
-        text=text[0].replace("\/","/")
-    else:    
-        new=i.split('"text":')
-        text=new[1].split("}")
-        text=text[0]
-    text=text.replace("\/","/")
-    text=text.replace('"','')
-    text=text.replace(r'\u0025','%')
-    text=text.replace(r'\u0040','@')
+        new = i.split('"external_url":')
+        text = new[1].split(",")
+        text = text[0].replace("\/", "/")
+    else:
+        new = i.split('"text":')
+        text = new[1].split("}")
+        text = text[0]
+    text = text.replace("\/", "/")
+    text = text.replace('"', "")
+    text = text.replace(r"\u0025", "%")
+    text = text.replace(r"\u0040", "@")
     return text
 
 
@@ -103,28 +110,25 @@ headers_dict = {
     "Sec-Fetch-Site": "none",
     "Sec-Fetch-User": "?1",
     "Sec-GPC": "1",
-    "TE": "trailers"
-
+    "TE": "trailers",
 }
 
 
-
 def facebook_extractor(link):
-    r=requests.get(link)
+    r = requests.get(link)
     print(r.content)
     #
-    soup=BeautifulSoup(r.content,'html5lib')
-    
-    #intro_card=soup.find(string=re.compile("INTRO_CARD")).text
-    
-    intro_card=soup.find_all(string="ContextItemDefaultRenderer")
-    
+    soup = BeautifulSoup(r.content, "html5lib")
 
-    intro_card=intro_card.split("ContextItemDefaultRenderer")
-    website_card=intro_card[-1].split("WebsiteContextItemRenderer")
-    found=[]
-    content={}
-    total=[0,0]
+    # intro_card=soup.find(string=re.compile("INTRO_CARD")).text
+
+    intro_card = soup.find_all(string="ContextItemDefaultRenderer")
+
+    intro_card = intro_card.split("ContextItemDefaultRenderer")
+    website_card = intro_card[-1].split("WebsiteContextItemRenderer")
+    found = []
+    content = {}
+    total = [0, 0]
     for i in intro_card[0:-1]:
         try:
             found.append(extract_facebook_bio_item(i))
@@ -136,10 +140,11 @@ def facebook_extractor(link):
         except:
             pass
     for i in found:
-        result=sm_classify(i)
-        content[result[0]]=result[1]
+        result = sm_classify(i)
+        content[result[0]] = result[1]
     return content
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     print(facebook_extractor("https://www.facebook.com/tandon.rakshit/"))
+
