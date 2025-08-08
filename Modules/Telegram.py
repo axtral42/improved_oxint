@@ -168,10 +168,10 @@ async def ox_name(
         name, keyword, False
     )  # Assuming Google and sma are defined elsewhere
     print("Dork done")
-    print(dorks)
+    # print(dorks)
     sm_profiles, sm_posts = sma.classify(dorks[0])
     content = {}
-    print(sm_profiles)
+    # print(sm_profiles)
     ##    for j in sm_profiles:
     ##      if j == "facebook":
     ##    for i in sm_profiles[j]:

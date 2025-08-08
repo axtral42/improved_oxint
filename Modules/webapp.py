@@ -41,10 +41,10 @@ try:
             dorks = Google.Dork(
                 name, keyword, False
             )  # Assuming Google and sma are defined elsewhere
-            print("Dork done")
-            print(dorks)
+            # print("Dork done")
+            # print(dorks)
             sm_profiles, sm_posts = sma.classify(dorks[0])
-            print(sm_profiles)
+            # print(sm_profiles)
             activity = dorks[2]
             documents = dorks[3]
             final = []
