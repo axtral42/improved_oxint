@@ -68,36 +68,41 @@ async def pm_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_response(
     text: str, update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> str:
-    keyword = ""
-    text = text.lower()
-    if "hello" in text:
-        return "How are you"
+    try:
+        keyword = ""
+        text = text.lower()
+        if "hello" in text:
+            return "How are you"
 
-    if "name:" in text:
-        name = text.strip().replace("name:", "").strip()
-        print(name)
-        if "keyword:" in text:
-            phrases = name.strip().split("keyword:")
-            print(phrases)
-            keyword = phrases[1].strip()
-            name = phrases[0].strip()
-            print(name, keyword)
-        print("successfully captured")
-        # Await ox_name correctly here
-        return await ox_name(name, keyword, update, context)  # Pass update and context
+        if "name:" in text:
+            name = text.strip().replace("name:", "").strip()
+            print(name)
+            if "keyword:" in text:
+                phrases = name.strip().split("keyword:")
+                print(phrases)
+                keyword = phrases[1].strip()
+                name = phrases[0].strip()
+                print(name, keyword)
+            print("successfully captured")
+            # Await ox_name correctly here
+            return await ox_name(
+                name, keyword, update, context
+            )  # Pass update and context
 
-    if "number" in text:
-        num = int(text.strip().replace("number:", "").strip())
-        print("number found", num, type(num))
-        return await ox_number(num, update, context)
-    if "ip:" in text:
-        ipaddr = text.strip().replace("ip:", "").strip()
-        return await ox_ip(ipaddr, update, context)
+        if "number" in text:
+            num = int(text.strip().replace("number:", "").strip())
+            print("number found", num, type(num))
+            return await ox_number(num, update, context)
+        if "ip:" in text:
+            ipaddr = text.strip().replace("ip:", "").strip()
+            return await ox_ip(ipaddr, update, context)
 
-    if "protonmail" in text:
-        mail = text.strip().replace("protonmail:", "").strip()
-        return await ox_pm(update, context, mail)
-    return "I don’t understand"
+        if "protonmail" in text:
+            mail = text.strip().replace("protonmail:", "").strip()
+            return await ox_pm(update, context, mail)
+        return "I don’t understand"
+    except:
+        return "An error occured, Try again later."
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -110,7 +115,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if context.bot.username.lower() in text.lower():
             new_text = text.replace(context.bot.username, "").strip()
             print(new_text)
-            print("hello")
+            # print("hello")
             # Await handle_response correctly here
             response = await handle_response(new_text, update, context)
             print("Bot: ", response)
@@ -155,7 +160,7 @@ async def send_local_image(
             await context.bot.send_photo(
                 chat_id=chat_id, photo=open(file_path, "rb"), caption=capt
             )
-        print("Image sent successfully!")
+    # print("Image sent successfully!")
     except Exception as e:
         print(f"Error sending image: {e}")
 
@@ -163,11 +168,11 @@ async def send_local_image(
 async def ox_name(
     name: str, keyword: str, update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
-    print("Function called")
+    # print("Function called")
     dorks = Google.Dork(
         name, keyword, False
     )  # Assuming Google and sma are defined elsewhere
-    print("Dork done")
+    # print("Dork done")
     # print(dorks)
     sm_profiles, sm_posts = sma.classify(dorks[0])
     content = {}
@@ -242,7 +247,7 @@ async def send_message(
     if not (img):
         await update.message.reply_text(message)
     else:
-        print("image function called")
+        # print("image function called")
         await send_local_image(
             update, context, file_path, url_var, capt=f"Source: {file_path}"
         )
@@ -253,9 +258,9 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def ox_number(num, update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print("function called")
+    # print("function called")
     result_dict = number.find_trace(num)
-    print(result_dict)
+    # print(result_dict)
     if result_dict:
         print("found")
         for key, value in result_dict.items():
